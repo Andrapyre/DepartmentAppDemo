@@ -67,17 +67,17 @@ export default function DepartmentForm({ isCreate, department }: Props) {
               {departmentFormName}
             </Form.Label>
             <Field
-              name="departmentName"
+              departmentName="departmentName"
               changeHandler={handleChange}
               label={labels.departmentName}
-              value={departmentState.departmentName}
+              departmentValue={departmentState.departmentName}
             ></Field>
             <Field
               readOnly
-              name="apiKey"
+              departmentName="apiKey"
               changeHandler={handleChange}
               label={labels.apiKey}
-              value={departmentState.apiKey}
+              departmentValue={departmentState.apiKey}
             ></Field>
           </fieldset>
         </Form.Group>
@@ -87,22 +87,22 @@ export default function DepartmentForm({ isCreate, department }: Props) {
               {contactFormName}
             </Form.Label>
             <Field
-              name="contactName"
+              departmentName="contactName"
               changeHandler={handleChange}
               label={labels.contactName}
-              value={departmentState.contactName}
+              departmentValue={departmentState.contactName}
             ></Field>
             <Field
-              name="email"
+              departmentName="email"
               changeHandler={handleChange}
               label={labels.contactEmail}
-              value={departmentState.contactEmail}
+              departmentValue={departmentState.contactEmail}
             ></Field>
             <Field
-              name="phone"
+              departmentName="phone"
               changeHandler={handleChange}
               label={labels.contactPhone}
-              value={departmentState.contactPhone}
+              departmentValue={departmentState.contactPhone}
             ></Field>
           </fieldset>
         </Form.Group>
