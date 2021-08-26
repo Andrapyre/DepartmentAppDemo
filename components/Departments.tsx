@@ -1,6 +1,6 @@
 import React, { Component } from "react"
 import Button from "react-bootstrap/Button"
-import { Link } from "react-router-dom"
+import Link from "next/link"
 import InputGroup from "react-bootstrap/InputGroup"
 import FormControl from "react-bootstrap/FormControl"
 import DepartmentCard from "./DepartmentCard"
@@ -130,7 +130,6 @@ class Departments extends Component {
         {this.state.departments.map((department, index) => {
           return (
             <DepartmentCard
-              deleteHandler={this.deleteDepartment}
               index={index}
               key={department.apiKey}
               metadata={department}
