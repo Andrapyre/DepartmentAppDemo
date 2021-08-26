@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit"
+import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit"
 import { Dispatch } from "react"
 
 const initialState: IDepartment[] = []
@@ -18,6 +18,18 @@ export interface IDepartment {
   contactPhone: string
 }
 
+const fetchDepartments = createAsyncThunk(
+  "departments/fetchAll",
+  async() => {
+    const response = await fetch("/departments")
+    if (response.status === 200) {
+      return (await response.json()) as IDepartment[]
+    } else {
+      return thunkApi.
+    }
+  }
+)
+
 const departmentSlice = createSlice({
   name: "departments",
   initialState,
@@ -28,6 +40,10 @@ const departmentSlice = createSlice({
 
     deleteDepartment: (state, action: PayloadAction<string>) => {},
   },
+  
+  extraReducers: (builder) => {
+    builder.addCase()
+  }
 })
 
 export const { createDepartment, updateDepartment, deleteDepartment } =
