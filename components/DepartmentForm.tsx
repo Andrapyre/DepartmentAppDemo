@@ -9,12 +9,22 @@ import { IDepartment } from "../store/slices/departments"
 const departmentFormName = "Department Info"
 const contactFormName = "Contact Info"
 
-const generateLabels = (isCreate: boolean) => {
+interface Labels {
+  departmentName: string
+  departmentId: string
+  contactEmail: string
+  contactName: string
+  contactPhone: string
+  buttonAction: string
+  formAction: string
+}
+
+const generateLabels = (isCreate: boolean): Labels => {
   const buttonAction = isCreate ? "Create" : "Update"
   const formAction = isCreate ? "Create" : "Edit"
   return {
     departmentName: "Department Name",
-    apiKey: "API Key",
+    departmentId: "Department Id",
     contactEmail: "Email",
     contactName: "Contact Name",
     contactPhone: "Phone",
@@ -69,7 +79,7 @@ export default function DepartmentForm({ isCreate, department }: Props) {
               readOnly
               departmentName="apiKey"
               changeHandler={handleChange}
-              label={labels.apiKey}
+              label={labels.departmentId}
               departmentValue={departmentState.departmentId}
             ></Field>
           </fieldset>
