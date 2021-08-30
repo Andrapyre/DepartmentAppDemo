@@ -1,5 +1,8 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit"
+import * as axios from "axios"
 import { Dispatch } from "react"
+
+const axiosClient = axios.default
 
 const initialState: IDepartment[] = []
 
@@ -18,43 +21,91 @@ export interface IDepartment {
   contactPhone: string
 }
 
-const fetchDepartments = createAsyncThunk(
-  "departments/fetchAll",
-  async() => {
-    const response = await fetch("/departments")
+const getAllDepartments = createAsyncThunk(
+  "departments/getAll",
+  async (_, thunkApi) => {
+    const response = await axiosClient.get<IDepartment[]>("/departments")
     if (response.status === 200) {
-      return (await response.json()) as IDepartment[]
+      return response.data
     } else {
-      return thunkApi.
+      return thunkApi.rejectWithValue(response.data)
     }
   }
 )
+
+const getDepartment = (id: string) =>
+  createAsyncThunk("departments/get", async (_, thunkApi) => {
+    const response = await axiosClient.get<IDepartment>(`/department/${id}`)
+    if (response.status === 200) {
+      return response.data
+    } else {
+      return thunkApi.rejectWithValue(response.data)
+    }
+  })
+
+const postDepartment = (department: IDepartment) =>
+  createAsyncThunk("departments/post", async (_, thunkApi) => {
+    const response = await axiosClient.post(`/department`, department)
+    if (response.status === 200) {
+      return response.data
+    } else {
+      return thunkApi.rejectWithValue(response.data)
+    }
+  })
+
+const putDepartment = (department: IDepartment) =>
+  createAsyncThunk("departments/put", async (_, thunkApi) => {
+    const response = await axiosClient.put(
+      `/department/${department.departmentId}`
+    )
+    if (response.status === 200) {
+      return response.data
+    } else {
+      return thunkApi.rejectWithValue(response.data)
+    }
+  })
+
+const deleteDepartment = (department: IDepartment) =>
+  createAsyncThunk("departments/delete", async (_, thunkApi) => {
+    const response = await axiosClient.delete(
+      `/department/${department.departmentId}`
+    )
+    if (response.status === 200) {
+      return response.data
+    } else {
+      return thunkApi.rejectWithValue(response.data)
+    }
+  })
 
 const departmentSlice = createSlice({
   name: "departments",
   initialState,
   reducers: {
-    createDepartment: (state, action: PayloadAction<ICreateDepartment>) => {},
+    createDepartmentAction: (
+      state,
+      action: PayloadAction<ICreateDepartment>
+    ) => {},
 
-    updateDepartment: (state, action: PayloadAction<IDepartment>) => {},
+    getAllDepartmentsAction: (state) => {},
 
-    deleteDepartment: (state, action: PayloadAction<string>) => {},
+    getDepartmentAction: (state, action: PayloadAction<string>) => {},
+
+    updateDepartmentAction: (state, action: PayloadAction<IDepartment>) => {},
+
+    deleteDepartmentAction: (state, action: PayloadAction<string>) => {},
   },
-  
-  extraReducers: (builder) => {
-    builder.addCase()
-  }
 })
 
-export const { createDepartment, updateDepartment, deleteDepartment } =
-  departmentSlice.actions
+export const {
+  createDepartmentAction,
+  updateDepartmentAction,
+  deleteDepartmentAction,
+} = departmentSlice.actions
 
 export const createDepartmentAsync =
   (department: ICreateDepartment) =>
   (dispatch: Dispatch<PayloadAction<ICreateDepartment>>) => {
-    dispatch(createDepartment(department))
+    dispatch(createDepartmentAction(department))
   }
-
-export const updateDepartmentAsync = ()
 
 export const departmentReducer = departmentSlice.reducer

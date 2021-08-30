@@ -1,4 +1,4 @@
 import { combineReducers } from "redux"
-import department from "./departments"
+import { departmentReducer } from "./departments"
 
-export default combineReducers({ department })
+export default combineReducers({ department: departmentReducer })

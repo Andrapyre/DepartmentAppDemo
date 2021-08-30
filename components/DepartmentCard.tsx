@@ -29,7 +29,9 @@ export default function DepartmentCard({ department }: Props) {
               variant="success"
             >
               <div className="navlink dropdown-item">
-                <Link href={`/departments${department.apiKey}`}>Edit</Link>
+                <Link href={`/departments${department.departmentId}`}>
+                  Edit
+                </Link>
               </div>
 
               <Dropdown.Item onClick={handleDelete}>Delete</Dropdown.Item>
