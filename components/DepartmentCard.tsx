@@ -5,7 +5,7 @@ import Dropdown from "react-bootstrap/Dropdown"
 import Link from "next/link"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faBuilding } from "@fortawesome/free-solid-svg-icons"
-import { IDepartment } from "./DepartmentForm"
+import { IDepartment } from "../store/slices/departments"
 interface Props {
   department: IDepartment
 }

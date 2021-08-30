@@ -1,7 +1,6 @@
 import Head from "next/head"
-import { useRouter } from "next/router"
 import React from "react"
-import DepartmentForm, { IDepartment } from "../../components/DepartmentForm"
+import DepartmentForm from "../../components/DepartmentForm"
 
 export default function CreateDepartmentPage() {
   return (

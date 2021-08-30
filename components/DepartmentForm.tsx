@@ -4,6 +4,7 @@ import Button from "react-bootstrap/Button"
 import Row from "react-bootstrap/Row"
 import Col from "react-bootstrap/Col"
 import Field from "./Field"
+import { IDepartment } from "../store/slices/departments"
 
 const departmentFormName = "Department Info"
 const contactFormName = "Contact Info"
@@ -25,14 +26,6 @@ const generateLabels = (isCreate: boolean) => {
 interface Props {
   isCreate: boolean
   department?: IDepartment
-}
-
-export interface IDepartment {
-  departmentName: string
-  departmentId: string
-  contactName: string
-  contactEmail: string
-  contactPhone: string
 }
 
 const defaultDepartmentState: IDepartment = {

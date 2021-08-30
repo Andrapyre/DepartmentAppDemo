@@ -1,7 +1,8 @@
 import Head from "next/head"
 import { useRouter } from "next/router"
 import React from "react"
-import DepartmentForm, { IDepartment } from "../../components/DepartmentForm"
+import DepartmentForm from "../../components/DepartmentForm"
+import { IDepartment } from "../../store/slices/departments"
 
 export default function DepartmentPage() {
   const router = useRouter()
