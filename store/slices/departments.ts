@@ -1,25 +1,11 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit"
 import * as axios from "axios"
 import { Dispatch } from "react"
+import { ICreateDepartment, IDepartment } from "../../models/Department"
 
 const axiosClient = axios.default
 
 const initialState: IDepartment[] = []
-
-export interface ICreateDepartment {
-  departmentName: string
-  contactName: string
-  contactEmail: string
-  contactPhone: string
-}
-
-export interface IDepartment {
-  departmentId: string
-  departmentName: string
-  contactName: string
-  contactEmail: string
-  contactPhone: string
-}
 
 const getAllDepartments = createAsyncThunk(
   "departments/getAll",
@@ -43,7 +29,7 @@ const getDepartment = (id: string) =>
     }
   })
 
-const postDepartment = (department: IDepartment) =>
+const postDepartment = (department: ICreateDepartment) =>
   createAsyncThunk("departments/post", async (_, thunkApi) => {
     const response = await axiosClient.post(`/department`, department)
     if (response.status === 200) {

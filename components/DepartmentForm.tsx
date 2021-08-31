@@ -4,7 +4,7 @@ import Button from "react-bootstrap/Button"
 import Row from "react-bootstrap/Row"
 import Col from "react-bootstrap/Col"
 import Field from "./Field"
-import { IDepartment } from "../store/slices/departments"
+import { IDepartment } from "../models/Department"
 
 const departmentFormName = "Department Info"
 const contactFormName = "Contact Info"

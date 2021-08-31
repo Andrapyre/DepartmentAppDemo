@@ -10,10 +10,10 @@ export const JsonParseErrorResponse = (): ApiResponse => {
   }
 }
 
-export const CustomerIdParseErrorResponse = (): ApiResponse => {
+export const DepartmentIdParseErrorResponse = (): ApiResponse => {
   return {
     statusCode: 400,
-    body: "The customer id contained non-numeric characters. Please retry with a valid customer id.",
+    body: "The customer id is not valid. Please retry with a valid customer id.",
   }
 }
 

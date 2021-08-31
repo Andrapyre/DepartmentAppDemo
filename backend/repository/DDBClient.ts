@@ -1,6 +1,5 @@
 import { Environment, FAKE_CREDENTIALS, Region } from "../Config"
 import { DynamoDBClient, DynamoDBClientConfig } from "@aws-sdk/client-dynamodb"
-// import { Region } from "../Config"
 import { DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb"
 
 const devConfig: DynamoDBClientConfig = {
@@ -24,4 +23,4 @@ const initializeClient = (): DynamoDBDocumentClient => {
   return DynamoDBDocumentClient.from(ddbClient)
 }
 
-export const DBClient = initializeClient
+export const DDBClient = initializeClient

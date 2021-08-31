@@ -4,7 +4,7 @@ import Link from "next/link"
 import React, { useState } from "react"
 import { Button, FormControl, InputGroup } from "react-bootstrap"
 import DepartmentCard from "../components/DepartmentCard"
-import { IDepartment } from "../store/slices/departments"
+import { IDepartment } from "../models/Department"
 import styles from "../styles/Home.module.css"
 
 const Home: NextPage = () => {
