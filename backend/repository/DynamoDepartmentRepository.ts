@@ -5,7 +5,8 @@ import {
   of as TaskEitherOf,
   fromEither,
 } from "fp-ts/lib/TaskEither"
-import { toError } from "fp-ts/lib/Either"
+import O from "fp-ts/lib/Option"
+import { fold, toError } from "fp-ts/lib/Either"
 import { pipe } from "fp-ts/lib/function"
 import { ApplicationError, ServerError } from "../models/ApplicationError"
 
@@ -25,7 +26,7 @@ export default class DynamoDepartmentRepository {
     this.client = client
   }
 
-  public getAllDepartments() {
+  public getAllDepartments(): TaskEither<ApplicationError, IDepartment[]> {
     const command = new ScanCommand({
       TableName: process.env.TABLE_NAME,
     })
@@ -43,7 +44,16 @@ export default class DynamoDepartmentRepository {
       ),
       chain((result) => {
         if (result.Items) {
-          return TaskEitherOf(result.Items)
+          const allItems: IDepartment[] = result.Items.flatMap((item) => {
+            return pipe(
+              DepartmentParser(item),
+              fold(
+                (_) => O.none,
+                (department) => O.some(department)
+              )
+            )
+          })
+          O.flatMap(allItems)
         } else return TaskEitherOf([])
       })
     )
@@ -93,6 +103,7 @@ export default class DynamoDepartmentRepository {
       )
     )
   }
+
   public putDepartment(
     department: IDepartment
   ): TaskEither<ApplicationError, void> {

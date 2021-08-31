@@ -45,7 +45,7 @@ export class DepartmentIdParsingError implements ApplicationError {
 
 export const ApplicationErrorResponseMatcher = (
   e: ApplicationError
-): ApiResponse => {
+): ApiResponse<string> => {
   switch (e.type) {
     case ApplicationErrorType.SERVER_ERROR:
       return ServerErrorResponse()
