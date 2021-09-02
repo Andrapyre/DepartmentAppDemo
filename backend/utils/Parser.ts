@@ -21,15 +21,6 @@ import {
 } from "../models/ApplicationError"
 import { ICreateDepartment, IDepartment } from "../../models/Department"
 
-const parseJson = (json: string): Either<ApplicationError, unknown> => {
-  return tryCatch(
-    () => JSON.parse(json),
-    (e) => {
-      return new JsonParseError(toError(e).message)
-    }
-  )
-}
-
 //this method is necessary to convert a struct decoder from a DecodeError type to a ApplicationError type
 //it is intended to be used with a "StructName".decode function and a request body previously parsed from JSON
 const parseDecoderToApplicationErrorType = <ResponseBody>(
@@ -39,19 +30,6 @@ const parseDecoderToApplicationErrorType = <ResponseBody>(
   return pipe(
     decoder(body),
     fold((e) => left(new JsonParseError(toError(e).message)), right)
-  )
-}
-
-const bodyParser = <ResponseBody>(
-  body: string,
-  decoder: (body: unknown) => Either<DecodeError, ResponseBody>
-) => {
-  return pipe(
-    body,
-    parseJson,
-    chain((result) =>
-      parseDecoderToApplicationErrorType<ResponseBody>(result, decoder)
-    )
   )
 }
 
@@ -71,9 +49,9 @@ const departmentStruct = struct<IDepartment>({
 })
 
 export const CreateDepartmentParser = (
-  body: string
+  body: unknown
 ): Either<ApplicationError, ICreateDepartment> => {
-  return bodyParser(body, createDepartmentStruct.decode)
+  return parseDecoderToApplicationErrorType(body, createDepartmentStruct.decode)
 }
 
 export const DepartmentParser = (

@@ -5,7 +5,7 @@ import {
   of as TaskEitherOf,
   fromEither,
 } from "fp-ts/lib/TaskEither"
-import O from "fp-ts/lib/Option"
+import * as O from "fp-ts/lib/Option"
 import { fold, toError } from "fp-ts/lib/Either"
 import { pipe } from "fp-ts/lib/function"
 import { ApplicationError, ServerError } from "../models/ApplicationError"
@@ -19,16 +19,19 @@ import {
 } from "@aws-sdk/lib-dynamodb"
 import { IDepartment } from "../../models/Department"
 import { DepartmentParser } from "../utils/Parser"
+import { compact } from "fp-ts/lib/Array"
 
 export default class DynamoDepartmentRepository {
   private readonly client: DynamoDBDocumentClient
-  constructor(client: DynamoDBDocumentClient) {
+  private readonly tableName: string
+  constructor(client: DynamoDBDocumentClient, tableName: string) {
     this.client = client
+    this.tableName = tableName
   }
 
   public getAllDepartments(): TaskEither<ApplicationError, IDepartment[]> {
     const command = new ScanCommand({
-      TableName: process.env.TABLE_NAME,
+      TableName: this.tableName,
     })
     return pipe(
       tryCatch(
@@ -44,16 +47,19 @@ export default class DynamoDepartmentRepository {
       ),
       chain((result) => {
         if (result.Items) {
-          const allItems: IDepartment[] = result.Items.flatMap((item) => {
+          const allItems: O.Option<IDepartment>[] = result.Items.map((item) => {
             return pipe(
               DepartmentParser(item),
               fold(
                 (_) => O.none,
-                (department) => O.some(department)
+                (department) => {
+                  const help = O.some(department)
+                  return help
+                }
               )
             )
           })
-          O.flatMap(allItems)
+          return TaskEitherOf(compact(allItems))
         } else return TaskEitherOf([])
       })
     )
@@ -61,7 +67,7 @@ export default class DynamoDepartmentRepository {
 
   public getDepartment(id: string) {
     const command = new GetCommand({
-      TableName: process.env.TABLE_NAME,
+      TableName: this.tableName,
       Key: {
         departmentId: id,
       },
@@ -84,7 +90,7 @@ export default class DynamoDepartmentRepository {
 
   public deleteDepartment(id: string): TaskEither<ApplicationError, void> {
     const command = new DeleteCommand({
-      TableName: process.env.TABLE_NAME,
+      TableName: this.tableName,
       Key: {
         departmentId: id,
       },
@@ -106,15 +112,16 @@ export default class DynamoDepartmentRepository {
 
   public putDepartment(
     department: IDepartment
-  ): TaskEither<ApplicationError, void> {
+  ): TaskEither<ApplicationError, IDepartment> {
     const command = new PutCommand({
-      TableName: process.env.TABLE_NAME,
+      TableName: this.tableName,
       Item: department,
     })
     return pipe(
       tryCatch(
         async () => {
           await this.client.send(command)
+          return department
         },
         (e) => {
           const msg = `${

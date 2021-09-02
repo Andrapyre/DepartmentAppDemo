@@ -3,10 +3,10 @@ enum LogType {
 }
 
 class Logger {
-  public error(msg: string, customerId: string, requestBody: string) {
+  public error(msg: string, errorType?: string, requestBody?: unknown) {
     const log = {
       type: LogType.ERROR,
-      customerId,
+      errorType,
       requestBody,
       message: msg,
     }

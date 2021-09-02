@@ -6,7 +6,3 @@ import { ApplicationError } from "../models/ApplicationError"
 export const guid = (): IOEither<ApplicationError, string> => {
   return rightIO(ioOf(uuid.v4()))
 }
-
-export const timestamp = (): IOEither<ApplicationError, number> => {
-  return rightIO(ioOf(Date.now()))
-}
